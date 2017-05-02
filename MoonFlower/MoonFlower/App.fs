@@ -7,5 +7,5 @@ type App = XAML<"App.xaml">
 
 [<STAThread>]
 [<EntryPoint>]
-let main argv =
+let Main argv =
     App().Root.Run()
