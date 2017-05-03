@@ -7,11 +7,38 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:vm="clr-namespace:MoonFlower.ViewModel;assembly=MoonFlower.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MoonFlower" d:DesignHeight="700" d:DesignWidth="525"
+        SaveWindowPosition="True">
+
     <Controls:MetroWindow.DataContext>
         <vm:MainViewModel />
     </Controls:MetroWindow.DataContext>
-    <Grid>
-        
+    <Grid x:Name="Main" ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <StackPanel x:Name="Header" Grid.Row="0">
+            <ListBox x:Name="AccountSelector" Height="50"></ListBox>
+            <StackPanel x:Name="TootBox">
+                <TextBox x:Name="TootText" Height="100" Text="{Binding InputText}"/>
+                <StackPanel x:Name="TootActions" Orientation="Horizontal">
+                    <Button x:Name="TootButton" Content="Toot!" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <ItemsControl Grid.Row="1" ItemsPanel="{DynamicResource TimelinePaneItems}" ItemTemplate="{DynamicResource TimelinePaneControl}">
+            <ItemsControl.Resources>
+                <ItemsPanelTemplate x:Key="TimelinePaneItems">
+                    <UniformGrid Rows="1"/>
+                </ItemsPanelTemplate>
+                <DataTemplate x:Key="TimelinePaneControl">
+                    <Border>
+                        <ItemsPresenter />
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+        </ItemsControl>
     </Grid>
 </Controls:MetroWindow>

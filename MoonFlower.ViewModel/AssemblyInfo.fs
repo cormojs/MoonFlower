@@ -1,6 +1,5 @@
 ﻿namespace MoonFlower.ViewModel.AssemblyInfo
 
-open System.Resources
 open System.Reflection
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
@@ -16,7 +15,14 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyCopyright("Copyright ©  2017")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
-[<assembly: NeutralResourcesLanguage("en")>]
+
+// ComVisible を false に設定すると、COM コンポーネントがこのアセンブリ内のその型を認識
+// できなくなります。COM からこのアセンブリ内の型にアクセスする必要がある場合は、
+// その型の ComVisible 属性を true に設定します。
+[<assembly: ComVisible(false)>]
+
+// このプロジェクトが COM に公開される場合、次の GUID がタイプ ライブラリの ID になります
+[<assembly: Guid("1ca6f0d9-efcc-4bc0-99ca-ff5c72ea400d")>]
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されます。:
 // 

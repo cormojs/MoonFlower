@@ -1,8 +1,10 @@
 ﻿namespace MoonFlower.ViewModel
 
 open ViewModule
+open ViewModule.FSharp
 
-type MainViewModel() =
+type PaneViewModel() as self =
     inherit ViewModelBase()
 
-    member this.X = "F#"
+
+

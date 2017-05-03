@@ -1,9 +1,15 @@
-﻿module MainViewModel
+﻿namespace MoonFlower.ViewModel
 
-open System
-open System.Windows
-open FSharp.Core
-open FSharp.ViewModule
+open ViewModule
+open ViewModule.FSharp
+open MoonFlower.ViewModel
 
-type MainViewModel = 
-    member this.test = "ssss"
+type MainViewModel() as self =
+    inherit ViewModelBase()
+
+    let inputText = self.Factory.Backing(<@ self.InputText @>, "")
+
+    member this.Panes = [| PaneViewModel() |]
+    member this.InputText
+        with get() = inputText.Value
+        and set(v) = inputText.Value <- v
