@@ -8,4 +8,4 @@ open MoonFlower.ViewModel
 type PaneViewModel() =
     inherit ViewModelBase()
 
-    member this.Timelines = [| TimelineViewModel() |]
+    member this.Timelines = [| TimelineViewModel({ Connection = "test" }) |]
