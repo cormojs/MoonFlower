@@ -3,8 +3,9 @@
 open ViewModule
 open ViewModule.FSharp
 
-type PaneViewModel() as self =
+open MoonFlower.ViewModel
+
+type PaneViewModel() =
     inherit ViewModelBase()
 
-
-
+    member this.Timelines = [| TimelineViewModel() |]

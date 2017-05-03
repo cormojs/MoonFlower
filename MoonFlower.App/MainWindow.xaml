@@ -13,6 +13,10 @@
     <Controls:MetroWindow.DataContext>
         <vm:MainViewModel />
     </Controls:MetroWindow.DataContext>
+
+    <Controls:MetroWindow.Resources>
+        <vm:MainViewModel x:Key="mockViewModel" />
+    </Controls:MetroWindow.Resources>
     <Grid x:Name="Main" ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -27,15 +31,35 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-        <ItemsControl Grid.Row="1" ItemsPanel="{DynamicResource TimelinePaneItems}" ItemTemplate="{DynamicResource TimelinePaneControl}">
+        <ItemsControl
+            Grid.Row="1"
+            ItemsPanel="{DynamicResource TimelinePaneItems}"
+            ItemTemplate="{DynamicResource TimelinePaneControl}"
+            d:DataContext="{StaticResource mockViewModel}"
+            ItemsSource="{Binding Panes}">
             <ItemsControl.Resources>
                 <ItemsPanelTemplate x:Key="TimelinePaneItems">
                     <UniformGrid Rows="1"/>
                 </ItemsPanelTemplate>
-                <DataTemplate x:Key="TimelinePaneControl">
-                    <Border>
-                        <ItemsPresenter />
-                    </Border>
+                <DataTemplate x:Key="TimelinePaneControl" DataType="vm:PaneViewModel">
+                    <TabControl ItemsSource="{Binding Timelines}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" />
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <ListBox ItemsSource="{Binding Statuses}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
                 </DataTemplate>
             </ItemsControl.Resources>
 
