@@ -55,6 +55,7 @@
     <Compile Include="TimelineViewModel.fs" />
     <Compile Include="PaneViewModel.fs" />
     <Compile Include="MainViewModel.fs" />
+    <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
