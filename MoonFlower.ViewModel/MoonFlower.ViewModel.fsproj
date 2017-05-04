@@ -10,7 +10,7 @@
     <RootNamespace>MoonFlower.ViewModel</RootNamespace>
     <AssemblyName>MoonFlower.ViewModel</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <TargetFSharpCoreVersion>4.4.1.0</TargetFSharpCoreVersion>
+    <TargetFSharpCoreVersion>3.259.3.1</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Name>MoonFlower.ViewModel</Name>
   </PropertyGroup>
@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
-      <HintPath>..\packages\FSharp.Core.3.0.2\lib\net40\FSharp.Core.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\.NETCore\3.259.41.0\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.ViewModule">
       <HintPath>..\packages\FSharp.ViewModule.Core.1.0.7.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\FSharp.ViewModule.dll</HintPath>
