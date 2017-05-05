@@ -9,6 +9,7 @@ type MainViewModel() as self =
 
     let inputText = self.Factory.Backing(<@ self.InputText @>, "")
 
+    member this.OAuth = OAuthViewModel()
     member this.Panes = [| PaneViewModel() |]
     member this.InputText
         with get() = inputText.Value

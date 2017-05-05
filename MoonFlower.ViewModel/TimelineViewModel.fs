@@ -3,7 +3,9 @@
 open ViewModule
 open ViewModule.FSharp
 
-open MoonFlower.Model
+// open MoonFlower.Model
+
+type Account = { Connection: string }
 
 type TimelineViewModel(account: Account) as self =
     inherit ViewModelBase()

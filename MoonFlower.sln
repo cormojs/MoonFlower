@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
+# Blend for Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoonFlower.App", "MoonFlower.App\MoonFlower.App.csproj", "{2EE4752B-CF95-49CA-BA97-AD3129E96973}"
@@ -14,6 +14,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MoonFlower.ViewModel", "Moo
 	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MoonFlower.Model", "MoonFlower.Model\MoonFlower.Model.fsproj", "{70A49087-E4EB-40FA-B5CE-6C4908D3A0BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mastonet", "..\Mastonet\Mastonet\Mastonet.csproj", "{2B3C1FE8-6DE5-494F-B156-F3CB1AEE5595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{70A49087-E4EB-40FA-B5CE-6C4908D3A0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70A49087-E4EB-40FA-B5CE-6C4908D3A0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70A49087-E4EB-40FA-B5CE-6C4908D3A0BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B3C1FE8-6DE5-494F-B156-F3CB1AEE5595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3C1FE8-6DE5-494F-B156-F3CB1AEE5595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B3C1FE8-6DE5-494F-B156-F3CB1AEE5595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3C1FE8-6DE5-494F-B156-F3CB1AEE5595}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

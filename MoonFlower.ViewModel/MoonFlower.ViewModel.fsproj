@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Content Include="packages.config" />
+    <Compile Include="OAuthViewModel.fs" />
     <Compile Include="TimelineViewModel.fs" />
     <Compile Include="PaneViewModel.fs" />
     <Compile Include="MainViewModel.fs" />

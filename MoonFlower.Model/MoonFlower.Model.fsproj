@@ -55,6 +55,9 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Mastonet">
+      <HintPath>..\..\Mastonet\Mastonet\bin\Debug\net45\Mastonet.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core">
       <Name>FSharp.Core</Name>

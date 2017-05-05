@@ -5,25 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MoonFlower.App"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf" 
         xmlns:vm="clr-namespace:MoonFlower.ViewModel;assembly=MoonFlower.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         mc:Ignorable="d"
         Title="MoonFlower" d:DesignHeight="700" d:DesignWidth="525"
         SaveWindowPosition="True">
+
+    <Controls:MetroWindow.Resources>
+        <vm:MainViewModel x:Key="mockViewModel" />
+    </Controls:MetroWindow.Resources>
 
     <Controls:MetroWindow.DataContext>
         <vm:MainViewModel />
     </Controls:MetroWindow.DataContext>
 
-    <Controls:MetroWindow.Resources>
-        <vm:MainViewModel x:Key="mockViewModel" />
-    </Controls:MetroWindow.Resources>
-    <Grid x:Name="Main" ShowGridLines="True">
+    <Grid x:Name="Main" ShowGridLines="True" d:DataContext="{StaticResource mockViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <StackPanel x:Name="Header" Grid.Row="0">
-            <ListBox x:Name="AccountSelector" Height="50"></ListBox>
+            <Grid x:Name="OpenAuthPage" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding OAuth.HostName}" />
+                <Button x:Name="OpenAuthPageButton" Grid.Column="1" Content="認証ページを開く">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction x:Name="OpenAuthPageAction" TargetObject="{Binding OAuth, Mode=OneWay}" MethodName="OpenAuthPage"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+            <Grid x:Name="AddAccount">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" x:Name="CodeInput" Controls:TextBoxHelper.Watermark="Input code" Text="{Binding OAuth.Code}" />
+                <Button Grid.Column="1" Content="認証"/>
+            </Grid>
+
             <StackPanel x:Name="TootBox">
                 <TextBox x:Name="TootText" Height="100" Text="{Binding InputText}"/>
                 <StackPanel x:Name="TootActions" Orientation="Horizontal">
@@ -35,7 +60,6 @@
             Grid.Row="1"
             ItemsPanel="{DynamicResource TimelinePaneItems}"
             ItemTemplate="{DynamicResource TimelinePaneControl}"
-            d:DataContext="{StaticResource mockViewModel}"
             ItemsSource="{Binding Panes}">
             <ItemsControl.Resources>
                 <ItemsPanelTemplate x:Key="TimelinePaneItems">
