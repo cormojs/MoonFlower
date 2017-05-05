@@ -40,13 +40,19 @@
                     </i:Interaction.Triggers>
                 </Button>
             </Grid>
-            <Grid x:Name="AddAccount">
+            <Grid x:Name="AddAccount" DataContext="{Binding OAuth}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="CodeInput" Controls:TextBoxHelper.Watermark="Input code" Text="{Binding OAuth.Code}" />
-                <Button Grid.Column="1" Content="認証"/>
+                <TextBox Grid.Column="0" x:Name="CodeInput" Controls:TextBoxHelper.Watermark="Input code" Text="{Binding Code}" />
+                <Button Grid.Column="1" Content="認証">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:CallMethodAction x:Name="AddAccountAction" TargetObject="{Binding Mode=OneWay}" MethodName="AddAccount"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
             </Grid>
 
             <StackPanel x:Name="TootBox">
