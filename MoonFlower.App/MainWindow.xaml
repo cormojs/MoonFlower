@@ -26,16 +26,16 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <StackPanel x:Name="Header" Grid.Row="0">
-            <Grid x:Name="OpenAuthPage" >
+            <Grid x:Name="OpenAuthPage" DataContext="{Binding OAuth}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding OAuth.HostName}" />
+                <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding HostName}" />
                 <Button x:Name="OpenAuthPageButton" Grid.Column="1" Content="認証ページを開く">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction x:Name="OpenAuthPageAction" TargetObject="{Binding OAuth, Mode=OneWay}" MethodName="OpenAuthPage"/>
+                            <ei:CallMethodAction x:Name="OpenAuthPageAction" TargetObject="{Binding Mode=OneWay}" MethodName="OpenAuthPage"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>

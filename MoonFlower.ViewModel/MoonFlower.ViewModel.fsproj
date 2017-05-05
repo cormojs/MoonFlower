@@ -65,6 +65,9 @@
     <Reference Include="FSharp.ViewModule">
       <HintPath>..\packages\FSharp.ViewModule.Core.1.0.7.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\FSharp.ViewModule.dll</HintPath>
     </Reference>
+    <Reference Include="Mastonet">
+      <HintPath>..\..\Mastonet\Mastonet\bin\Debug\net45\Mastonet.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
