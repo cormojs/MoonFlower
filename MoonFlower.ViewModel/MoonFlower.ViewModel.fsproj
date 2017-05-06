@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Content Include="packages.config" />
+    <Compile Include="AppConfigurationSection.fs" />
     <Compile Include="OAuthViewModel.fs" />
     <Compile Include="TimelineViewModel.fs" />
     <Compile Include="PaneViewModel.fs" />
@@ -69,12 +70,17 @@
       <HintPath>..\..\Mastonet\Mastonet\bin\Debug\net45\Mastonet.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.ValueTuple">
       <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MoonFlower.Model\MoonFlower.Model.fsproj">

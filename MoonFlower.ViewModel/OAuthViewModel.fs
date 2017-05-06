@@ -40,6 +40,7 @@ type OAuthViewModel(app: AppModel) as self =
             | None -> Debug.WriteLine "authentication failed"
             | Some (auth, account) ->
                 this.CurrentUser <- Some account
-        }
+        } |> Async.Start
+
 
     member this.GetAccounts() = app.Accounts

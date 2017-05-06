@@ -7,7 +7,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf" 
         xmlns:vm="clr-namespace:MoonFlower.ViewModel;assembly=MoonFlower.ViewModel"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Name="metroWindow"
         mc:Ignorable="d"
         Title="MoonFlower" d:DesignHeight="700" d:DesignWidth="525"
         SaveWindowPosition="True">
@@ -15,6 +15,11 @@
     <Controls:MetroWindow.Resources>
         <vm:MainViewModel x:Key="mockViewModel" />
     </Controls:MetroWindow.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <ei:CallMethodAction x:Name="SaveConfigAction" TargetObject="{Binding}" MethodName="Save"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Controls:MetroWindow.DataContext>
         <vm:MainViewModel />
@@ -26,13 +31,21 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <StackPanel x:Name="Header" Grid.Row="0">
+            <Button Content="Test">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="Load"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
             <Grid x:Name="OpenAuthPage" DataContext="{Binding OAuth}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="101*" />
+                    <ColumnDefinition Width="45*"/>
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding HostName}" />
-                <Button x:Name="OpenAuthPageButton" Grid.Column="1" Content="認証ページを開く">
+                <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding HostName}" Grid.ColumnSpan="2" />
+                <Button x:Name="OpenAuthPageButton" Grid.Column="2" Content="認証ページを開く">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <ei:CallMethodAction x:Name="OpenAuthPageAction" TargetObject="{Binding Mode=OneWay}" MethodName="OpenAuthPage"/>

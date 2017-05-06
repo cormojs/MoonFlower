@@ -3,6 +3,9 @@
 open Mastonet
 open Mastonet.Entities
 
+open Newtonsoft.Json
+
+open System
 open System.Diagnostics
 open System.Net
 
@@ -12,22 +15,24 @@ type AppModel() =
     do
         ServicePointManager.SecurityProtocol <- SecurityProtocolType.Tls12
 
-    member val Registrations: Map<string, AppRegistration> = Map.empty with get, set
-    member val Accounts: Map<string, YourAccount> = Map.empty with get, set
+    [<JsonProperty("registrations")>]
+    member val Registrations: AppRegistration list = [] with get, set
+    [<JsonProperty("accounts")>]
+    member val Accounts: YourAccount list = [] with get, set
 
     member this.RegisterApp(host: string): Async<AuthenticationClient> =
-        match this.Registrations |> Map.tryFind host with
+        match this.Registrations |> List.tryFind (fun r -> r.Instance = host) with
         | Some regist -> async { return AuthenticationClient(regist) }
         | None -> async {
             let client = AuthenticationClient(host)
             let! regist = client.CreateApp(appName, Scope.Read + Scope.Write + Scope.Follow)
                           |> Async.AwaitTask
-            this.Registrations <- this.Registrations.Add(host, regist)
+            this.Registrations <- regist :: this.Registrations
             return client
         }
 
     member this.ConnectAccount(host: string, code: string) =
-        match this.Registrations |> Map.tryFind host with
+        match this.Registrations |> List.tryFind (fun r -> r.Instance = host) with
         | None -> async { return None }
         | Some regist -> async {
             let client = AuthenticationClient(regist)
@@ -41,6 +46,6 @@ type AppModel() =
             let client = MastodonClient(regist, auth)
             let! account = client.GetCurrentUser() |> Async.AwaitTask
             let yourAccount = { Auth = auth; App = regist; Detail = account; }
-            this.Accounts <- this.Accounts.Add(auth.AccessToken, yourAccount)
+            this.Accounts <- yourAccount :: this.Accounts
             return yourAccount
         }
