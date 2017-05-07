@@ -1,10 +1,12 @@
 ﻿namespace MoonFlower.ViewModel
 
 open System
+open System.Diagnostics
 open System.IO
 open System.Configuration
 open System.Runtime.Serialization.Formatters.Binary
 open Newtonsoft.Json
+open Newtonsoft.Json.Serialization
 open MoonFlower.Model
 
 type AppConfigurationSection() =
@@ -20,5 +22,11 @@ type AppConfigurationSection() =
         with get() =
             match this.Data with
             | null -> AppModel()
-            | str -> JsonConvert.DeserializeObject<AppModel>(str)
+            | str ->
+                try
+                    JsonConvert.DeserializeObject<AppModel>(str)
+                with | e ->
+                    Debug.WriteLine str
+                    Debug.WriteLine e
+                    AppModel()
         and set(v: AppModel) = this.Data <- JsonConvert.SerializeObject(v)

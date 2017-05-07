@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:MoonFlower.App"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf" 
+        xmlns:lm="clr-namespace:Livet.Messaging;assembly=Livet"
         xmlns:vm="clr-namespace:MoonFlower.ViewModel;assembly=MoonFlower.ViewModel"
+        xmlns:m="clr-namespace:MoonFlower.Model;assembly=MoonFlower.Model"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Name="metroWindow"
         mc:Ignorable="d"
         Title="MoonFlower" d:DesignHeight="700" d:DesignWidth="525"
@@ -14,11 +16,15 @@
 
     <Controls:MetroWindow.Resources>
         <vm:MainViewModel x:Key="mockViewModel" />
+        <vm:OptionsTypeConverter x:Key="optionsTypeConverter"/>
     </Controls:MetroWindow.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
             <ei:CallMethodAction x:Name="SaveConfigAction" TargetObject="{Binding}" MethodName="Save"/>
         </i:EventTrigger>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="Update">
+            <ei:CallMethodAction TargetObject="{Binding}" MethodName="Reload" />
+        </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
 
     <Controls:MetroWindow.DataContext>
@@ -31,47 +37,55 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <StackPanel x:Name="Header" Grid.Row="0">
-            <Button Content="Test">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="Load"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-            <Grid x:Name="OpenAuthPage" DataContext="{Binding OAuth}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="101*" />
-                    <ColumnDefinition Width="45*"/>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding HostName}" Grid.ColumnSpan="2" />
-                <Button x:Name="OpenAuthPageButton" Grid.Column="2" Content="認証ページを開く">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction x:Name="OpenAuthPageAction" TargetObject="{Binding Mode=OneWay}" MethodName="OpenAuthPage"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-            </Grid>
-            <Grid x:Name="AddAccount" DataContext="{Binding OAuth}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="CodeInput" Controls:TextBoxHelper.Watermark="Input code" Text="{Binding Code}" />
-                <Button Grid.Column="1" Content="認証">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:CallMethodAction x:Name="AddAccountAction" TargetObject="{Binding Mode=OneWay}" MethodName="AddAccount"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-            </Grid>
+            <StackPanel x:Name="AuthenticationBox" DataContext="{Binding OAuth}">
+                <Grid x:Name="OpenAuthPage">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="101*" />
+                        <ColumnDefinition Width="45*"/>
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding HostName}" Grid.ColumnSpan="2" />
+                    <Button x:Name="OpenAuthPageButton" Grid.Column="2" Content="認証ページを開く">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction x:Name="OpenAuthPageAction" TargetObject="{Binding Mode=OneWay}" MethodName="OpenAuthPage"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </Grid>
+                <Grid x:Name="AddAccount">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="CodeInput" Controls:TextBoxHelper.Watermark="Input code" Text="{Binding Code}" />
+                    <Button Grid.Column="1" Content="認証">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction x:Name="AddAccountAction" TargetObject="{Binding Mode=OneWay}" MethodName="AddAccount"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </Grid>
+            </StackPanel>
 
-            <StackPanel x:Name="TootBox">
-                <TextBox x:Name="TootText" Height="100" Text="{Binding InputText}"/>
+            <StackPanel DataContext="{Binding Tooter}">
+                <ComboBox x:Name="comboBox" ItemsSource="{Binding Accounts, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedAccount, Mode=OneWayToSource, Converter={StaticResource optionsTypeConverter}}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FullName}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBox Text="{Binding TootTextInput, UpdateSourceTrigger=PropertyChanged}"/>
                 <StackPanel x:Name="TootActions" Orientation="Horizontal">
-                    <Button x:Name="TootButton" Content="Toot!" />
+                    <Button x:Name="TootButton" Content="Toot!">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction TargetObject="{Binding}" MethodName="Toot" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

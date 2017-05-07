@@ -1,18 +1,20 @@
 ﻿namespace MoonFlower.ViewModel
 
+open System.Configuration
 open System.Diagnostics
-
+open Newtonsoft.Json
 open ViewModule
 open ViewModule.FSharp
 open ViewModule.Validation.FSharp
-
+open Livet.Messaging
 open MoonFlower.Model
 
-type OAuthViewModel(app: AppModel) as self =
+type OAuthViewModel(app: AppModel, messenger: InteractionMessenger) as self =
     inherit ViewModelBase()
 
     let hostName = self.Factory.Backing(<@ self.HostName @>, "", notNullOrWhitespace)
     let code = self.Factory.Backing(<@ self.Code @>, "", notNullOrWhitespace)
+    let appSettings = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).AppSettings
 
     member this.HostName
         with get() = hostName.Value
@@ -21,8 +23,6 @@ type OAuthViewModel(app: AppModel) as self =
     member this.Code
         with get() = code.Value
         and set(v) = code.Value <- v
-
-    member val CurrentUser: (MoonFlower.Model.YourAccount option) = None with get, set
 
     member this.OpenAuthPage() = 
         async {
@@ -36,10 +36,19 @@ type OAuthViewModel(app: AppModel) as self =
     member this.AddAccount() =
         async {
             let! result = app.ConnectAccount(this.HostName, this.Code)
+            sprintf "add %s, %s" this.HostName this.Code
+            |> Debug.WriteLine
             match result with
-            | None -> Debug.WriteLine "authentication failed"
+            | None ->
+                JsonConvert.SerializeObject(app)
+                |> sprintf "no registration found: %s"
+                |> Debug.WriteLine
             | Some (auth, account) ->
-                this.CurrentUser <- Some account
+                sprintf "added account: %s" (account.ToString())
+                |> Debug.WriteLine
+                messenger.RaiseAsync(InteractionMessage("Update"))
+                |> Async.AwaitTask
+                |> ignore
         } |> Async.Start
 
 
