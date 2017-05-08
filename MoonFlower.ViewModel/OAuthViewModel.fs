@@ -9,7 +9,8 @@ open ViewModule.Validation.FSharp
 open Livet.Messaging
 open MoonFlower.Model
 
-type OAuthViewModel(app: AppModel, messenger: InteractionMessenger) as self =
+
+type OAuthViewModel(parent: MainViewModelBase, messenger: InteractionMessenger) as self =
     inherit ViewModelBase()
 
     let hostName = self.Factory.Backing(<@ self.HostName @>, "", notNullOrWhitespace)
@@ -27,7 +28,7 @@ type OAuthViewModel(app: AppModel, messenger: InteractionMessenger) as self =
     member this.OpenAuthPage() = 
         async {
             try
-                let! client = app.RegisterApp(this.HostName)
+                let! client = parent.App.RegisterApp(this.HostName)
                 let url = client.OAuthUrl()
                 Process.Start(url) |> ignore
             with | e -> Debug.WriteLine e
@@ -35,21 +36,22 @@ type OAuthViewModel(app: AppModel, messenger: InteractionMessenger) as self =
 
     member this.AddAccount() =
         async {
-            let! result = app.ConnectAccount(this.HostName, this.Code)
+            let! result = parent.App.ConnectAccount(this.HostName, this.Code)
             sprintf "add %s, %s" this.HostName this.Code
             |> Debug.WriteLine
             match result with
             | None ->
-                JsonConvert.SerializeObject(app)
+                JsonConvert.SerializeObject parent.App
                 |> sprintf "no registration found: %s"
                 |> Debug.WriteLine
             | Some (auth, account) ->
                 sprintf "added account: %s" (account.ToString())
                 |> Debug.WriteLine
+                Debug.WriteLine(JsonConvert.SerializeObject parent.App)
                 messenger.RaiseAsync(InteractionMessage("Update"))
                 |> Async.AwaitTask
                 |> ignore
         } |> Async.Start
 
 
-    member this.GetAccounts() = app.Accounts
+    member this.GetAccounts() = parent.App.Accounts

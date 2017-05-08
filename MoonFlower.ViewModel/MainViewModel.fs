@@ -11,14 +11,14 @@ open Livet.Messaging
 open MoonFlower.Model
 open MoonFlower.ViewModel
 
-type MainViewModel() as self =
-    inherit ViewModelBase()
 
-    let config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
-    let mutable app = AppModel()
-    let messenger = InteractionMessenger()
+type MainViewModel() as self =
+    inherit MainViewModelBase()
     
-    do
+    let messenger = InteractionMessenger()
+    let config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
+    
+    member this.Load() =
         let section = 
             match config.Sections.["AppConfigurationSection"] with
             | null -> 
@@ -29,17 +29,19 @@ type MainViewModel() as self =
                 config.Save()
                 section
             | _ -> config.Sections.["AppConfigurationSection"] :?> AppConfigurationSection
-        app <- section.AppModel
+        this.App <- section.AppModel
+        this.App.LoadAvatar()
+        |> Async.RunSynchronously
+        this.Reload()
 
     member this.Save() =
         let section = config.Sections.["AppConfigurationSection"] :?> AppConfigurationSection
-        section.AppModel <- app
-        JsonConvert.SerializeObject app |> Debug.WriteLine
+        section.AppModel <- this.App
+        JsonConvert.SerializeObject this.App |> Debug.WriteLine
         config.Save()
         sprintf "config saved to: %s" config.FilePath |> Debug.WriteLine
-    member val Messenger = messenger
-    member this.OAuth = OAuthViewModel(app, messenger)
-    member this.Tooter = TooterViewModel(app, messenger)
+    member this.OAuth = OAuthViewModel(this, messenger)
+    member this.Tooter = TooterViewModel(this, messenger)
     member this.Panes = [| PaneViewModel() |]
     member this.Reload() =
         self.RaisePropertyChanged(<@ this @>)

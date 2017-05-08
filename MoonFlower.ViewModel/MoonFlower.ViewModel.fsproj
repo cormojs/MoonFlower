@@ -54,6 +54,8 @@
     <Content Include="packages.config" />
     <Compile Include="Converters.fs" />
     <Compile Include="AppConfigurationSection.fs" />
+    <Compile Include="IMainViewModel.fs" />
+    <Compile Include="MainViewModelBase.fs" />
     <Compile Include="TooterModelView.fs" />
     <Compile Include="OAuthViewModel.fs" />
     <Compile Include="TimelineViewModel.fs" />

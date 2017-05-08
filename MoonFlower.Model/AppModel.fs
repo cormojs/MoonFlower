@@ -30,7 +30,11 @@ type AppModel() =
 
     member this.RegisterApp(host: string): Async<AuthenticationClient> =
         match this.Registrations |> List.tryFind (fun (i, _) -> i = host) with
-        | Some (_, regist) -> async { return AuthenticationClient(regist) }
+        | Some (_, regist) ->
+            async {
+                regist.Instance <- host
+                return AuthenticationClient(regist)
+            }
         | None -> async {
             let client = AuthenticationClient(host)
             let! regist = client.CreateApp(appName, Scope.Read + Scope.Write + Scope.Follow)
@@ -62,7 +66,11 @@ type AppModel() =
             this.Accounts <- yourAccount :: this.Accounts
             return yourAccount
         }
-
+    member this.LoadAvatar(): Async<unit> =
+        this.Accounts
+        |> List.map (fun acc -> acc.SaveAvatar())
+        |> Async.Parallel
+        |> Async.Ignore
     member this.GetUser(username: string): YourAccount option =
         this.Accounts
         |> List.tryFind (fun a -> a.FullName = username)
