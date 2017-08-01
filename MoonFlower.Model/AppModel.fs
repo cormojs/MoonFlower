@@ -57,12 +57,8 @@ type AppModel() =
         async {
             let client = MastodonClient(regist, auth)
             let! account = client.GetCurrentUser() |> Async.AwaitTask
-            let yourAccount = {
-                Host = host;
-                Auth = auth;
-                App = regist;
-                Detail = account;
-            }
+            let yourAccount = new YourAccount(auth, regist, account)
+            yourAccount.Host <- host
             this.Accounts <- yourAccount :: this.Accounts
             return yourAccount
         }

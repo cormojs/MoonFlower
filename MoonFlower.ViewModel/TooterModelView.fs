@@ -13,6 +13,7 @@ type TooterViewModel(parent: MainViewModelBase, messenger: InteractionMessenger)
     inherit ViewModelBase()
 
     let tootText = self.Factory.Backing(<@ self.TootTextInput @>, "", notNullOrWhitespace)
+    let selectedAccount = self.Factory.Backing(<@ self.SelectedAccount @>, None)
 
     member this.TootTextInput
         with get() = tootText.Value
@@ -20,7 +21,9 @@ type TooterViewModel(parent: MainViewModelBase, messenger: InteractionMessenger)
             Debug.WriteLine v
             tootText.Value <- v
 
-    member val SelectedAccount: YourAccount option = None with get, set
+    member this.SelectedAccount
+        with get(): YourAccount option = selectedAccount.Value
+        and set(v: YourAccount option) = selectedAccount.Value <- v
     member this.Toot() =
         match this.SelectedAccount with
         | Some account ->
@@ -35,4 +38,4 @@ type TooterViewModel(parent: MainViewModelBase, messenger: InteractionMessenger)
             } |> Async.Start
         | None -> Debug.WriteLine "no account selected"
     
-    member this.Accounts = parent.App.Accounts
+    member val Accounts = parent.App.Accounts

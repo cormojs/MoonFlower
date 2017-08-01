@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="YourAccount.fs" />
+    <Compile Include="TimelineAPI.fs" />
+    <Compile Include="TimelineModel.fs" />
     <Compile Include="AppModel.fs" />
     <Content Include="packages.config" />
     <Content Include="App.config" />

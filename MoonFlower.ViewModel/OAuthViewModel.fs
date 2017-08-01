@@ -37,18 +37,17 @@ type OAuthViewModel(parent: MainViewModelBase, messenger: InteractionMessenger) 
     member this.AddAccount() =
         async {
             let! result = parent.App.ConnectAccount(this.HostName, this.Code)
-            sprintf "add %s, %s" this.HostName this.Code
-            |> Debug.WriteLine
+            sprintf "add %s, %s" this.HostName this.Code |> Debug.WriteLine
             match result with
             | None ->
                 JsonConvert.SerializeObject parent.App
                 |> sprintf "no registration found: %s"
                 |> Debug.WriteLine
             | Some (auth, account) ->
-                sprintf "added account: %s" (account.ToString())
-                |> Debug.WriteLine
-                Debug.WriteLine(JsonConvert.SerializeObject parent.App)
-                messenger.RaiseAsync(InteractionMessage("Update"))
+                Debug.WriteLine <| sprintf "added account: %s" (account.ToString())
+                Debug.WriteLine <| JsonConvert.SerializeObject parent.App
+                parent.App.CurrentUser <- account.FullName
+                messenger.RaiseAsync(InteractionMessage("AccountUpdate"))
                 |> Async.AwaitTask
                 |> ignore
         } |> Async.Start

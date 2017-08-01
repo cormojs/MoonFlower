@@ -8,8 +8,12 @@
         xmlns:l="http://schemas.livet-mvvm.net/2011/wpf" 
         xmlns:lm="clr-namespace:Livet.Messaging;assembly=Livet"
         xmlns:vm="clr-namespace:MoonFlower.ViewModel;assembly=MoonFlower.ViewModel"
-        xmlns:m="clr-namespace:MoonFlower.Model;assembly=MoonFlower.Model"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:ValueEditors="clr-namespace:Microsoft.VisualStudio.DesignTools.Utility.ValueEditors;assembly=Microsoft.VisualStudio.DesignTools.Utility" x:Name="metroWindow"
+        xmlns:entities="clr-namespace:Mastonet.Entities;assembly=Mastonet"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:ValueEditors="clr-namespace:Microsoft.VisualStudio.DesignTools.Utility.ValueEditors;assembly=Microsoft.VisualStudio.DesignTools.Utility"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        x:Name="metroWindow"
         mc:Ignorable="d"
         Title="MoonFlower" d:DesignHeight="700" d:DesignWidth="525"
         SaveWindowPosition="True">
@@ -17,75 +21,6 @@
     <Controls:MetroWindow.Resources>
         <vm:MainViewModel x:Key="mockViewModel" />
         <vm:OptionsTypeConverter x:Key="optionsTypeConverter"/>
-        
-        <ControlTemplate x:Key="MainPaneAreaTemplate" TargetType="{x:Type Controls:MetroTabControl}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="ColumnDefinition0"/>
-                    <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
-                    <RowDefinition x:Name="RowDefinition1" Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid x:Name="HeaderPanelGrid" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Controls:Underline x:Name="Underline" BorderBrush="{TemplateBinding Controls:TabControlHelper.UnderlineBrush}" Background="Transparent" LineThickness="1" Placement="Bottom" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="Collapsed"/>
-                    <Button Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" BorderBrush="{x:Null}">
-                        <Rectangle Grid.Column="0" Width="15" Height="15" Fill="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}">
-                            <Rectangle.OpacityMask>
-                                <VisualBrush Visual="{StaticResource appbar_add}" />
-                            </Rectangle.OpacityMask>
-                        </Rectangle>
-                    </Button>
-                    <TabPanel Grid.Column="1" x:Name="HeaderPanel" IsItemsHost="True" KeyboardNavigation.TabIndex="1" VerticalAlignment="Center"/>
-                </Grid>
-                <Border x:Name="ContentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
-                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentTemplate="{TemplateBinding SelectedContentTemplate}" Content="{TemplateBinding SelectedContent}" ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="Hidden"/>
-                </Border>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="Controls:TabControlHelper.Underlined" Value="TabPanel">
-                    <Setter Property="Visibility" TargetName="Underline" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="TabStripPlacement" Value="Bottom">
-                    <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
-                    <Setter Property="Grid.Row" TargetName="HeaderPanelGrid" Value="1"/>
-                    <Setter Property="Margin" TargetName="HeaderPanelGrid" Value="2,0,2,2"/>
-                    <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                    <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
-                    <Setter Property="Placement" TargetName="Underline" Value="Top"/>
-                </Trigger>
-                <Trigger Property="TabStripPlacement" Value="Left">
-                    <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
-                    <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
-                    <Setter Property="Grid.Column" TargetName="ContentPanel" Value="1"/>
-                    <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
-                    <Setter Property="Grid.Column" TargetName="HeaderPanelGrid" Value="0"/>
-                    <Setter Property="Grid.Row" TargetName="HeaderPanelGrid" Value="0"/>
-                    <Setter Property="Margin" TargetName="HeaderPanelGrid" Value="2,2,0,2"/>
-                    <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                    <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                    <Setter Property="Placement" TargetName="Underline" Value="Right"/>
-                </Trigger>
-                <Trigger Property="TabStripPlacement" Value="Right">
-                    <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
-                    <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
-                    <Setter Property="Grid.Column" TargetName="ContentPanel" Value="0"/>
-                    <Setter Property="Grid.Row" TargetName="ContentPanel" Value="0"/>
-                    <Setter Property="Grid.Column" TargetName="HeaderPanelGrid" Value="1"/>
-                    <Setter Property="Grid.Row" TargetName="HeaderPanelGrid" Value="0"/>
-                    <Setter Property="Margin" TargetName="HeaderPanelGrid" Value="0,2,2,2"/>
-                    <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
-                    <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
-                    <Setter Property="Placement" TargetName="Underline" Value="Left"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        
     </Controls:MetroWindow.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -95,8 +30,14 @@
             <ei:CallMethodAction x:Name="SaveConfigAction" TargetObject="{Binding}" MethodName="Save"/>
         </i:EventTrigger>
         <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="Update">
-            <ei:CallMethodAction x:Name="UpdateAction" TargetObject="{Binding}"
+            <ei:CallMethodAction x:Name="UpdateAction"
+                                 TargetObject="{Binding}"
                                  MethodName="Reload" />
+        </l:InteractionMessageTrigger>
+        <l:InteractionMessageTrigger Messenger="{Binding Messenger}" MessageKey="AccountUpdate">
+            <ei:CallMethodAction x:Name="AccountUpdateAction"
+                                 TargetObject="{Binding}"
+                                 MethodName="AccountAdded" />
         </l:InteractionMessageTrigger>
     </i:Interaction.Triggers>
 
@@ -104,7 +45,9 @@
         <vm:MainViewModel />
     </Controls:MetroWindow.DataContext>
 
-    <Grid x:Name="Main" ShowGridLines="True" d:DataContext="{StaticResource mockViewModel}">
+    <Grid x:Name="Main"
+          ShowGridLines="True"
+          d:DataContext="{StaticResource mockViewModel}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="1*" />
@@ -117,11 +60,17 @@
                         <ColumnDefinition Width="45*"/>
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="HostNameInput" Controls:TextBoxHelper.Watermark="Input host name" Text="{Binding HostName}" Grid.ColumnSpan="2" />
+                    <TextBox Grid.Column="0"
+                             x:Name="HostNameInput"
+                             Controls:TextBoxHelper.Watermark="Input host name"
+                             Text="{Binding HostName}"
+                             Grid.ColumnSpan="2" />
                     <Button x:Name="OpenAuthPageButton" Grid.Column="2" Content="認証ページを開く">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction x:Name="OpenAuthPageAction" TargetObject="{Binding Mode=OneWay}" MethodName="OpenAuthPage"/>
+                                <ei:CallMethodAction x:Name="OpenAuthPageAction"
+                                                     TargetObject="{Binding Mode=OneWay}"
+                                                     MethodName="OpenAuthPage"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Button>
@@ -131,18 +80,22 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Column="0" x:Name="CodeInput" Controls:TextBoxHelper.Watermark="Input code" Text="{Binding Code}" />
+                    <TextBox Grid.Column="0" x:Name="CodeInput"
+                             Controls:TextBoxHelper.Watermark="Input code"
+                             Text="{Binding Code}" />
                     <Button Grid.Column="1" Content="認証">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction x:Name="AddAccountAction" TargetObject="{Binding Mode=OneWay}" MethodName="AddAccount"/>
+                                <ei:CallMethodAction x:Name="AddAccountAction"
+                                                     TargetObject="{Binding Mode=OneWay}"
+                                                     MethodName="AddAccount"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Button>
                 </Grid>
             </StackPanel>
 
-            <Grid DataContext="{Binding Tooter}">
+            <Grid x:Name="TootBox" DataContext="{Binding Tooter}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition Width="*" />
@@ -151,40 +104,19 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <ComboBox Grid.Row="0" Grid.Column="0"
-                          ItemsSource="{Binding Accounts}"
-                          SelectedItem="{Binding SelectedAccount, Converter={StaticResource optionsTypeConverter}, Mode=OneWayToSource}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate DataType="m:YourAccount">
-                            <StackPanel>
-                                <ContentControl x:Name="Avatar" Height="48" Width="48">
-                                    <ContentControl.Resources>
-                                        <Controls:ProgressRing x:Key="loadingRing" Width="48" Height="48" Foreground="{DynamicResource AccentColorBrush}"/>
-                                        <Image Width="48" Height="48" x:Key="avatarImage" Source="{Binding AvatarImageObj}" StretchDirection="DownOnly" />
-                                    </ContentControl.Resources>
-                                    <ContentControl.CacheMode>
-                                        <BitmapCache />
-                                    </ContentControl.CacheMode>
-                                    <ContentControl.Style>
-                                        <Style TargetType="ContentControl">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding AvatarImageLoaded}" Value="false">
-                                                    <Setter Property="Content" Value="{DynamicResource loadingRing}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding AvatarImageLoaded}" Value="true">
-                                                    <Setter Property="Content" Value="{DynamicResource avatarImage}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ContentControl.Style>
-                                </ContentControl>
-                                <TextBlock Text="{Binding Detail.AccountName}" />
-                                <TextBlock Text="{Binding Host}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
+                <ComboBox x:Name="AccountSelector"
+                          Grid.Row="0" Grid.Column="0"
+                          ItemsSource="{Binding Accounts, UpdateSourceTrigger=PropertyChanged}"
+                          ItemTemplate="{StaticResource AccountSelectorItemTemplate}"
+                          SelectedItem="{Binding SelectedAccount, UpdateSourceTrigger=PropertyChanged,
+                                                 Converter={StaticResource optionsTypeConverter},
+                                                 Mode=TwoWay }"
+                          Controls:TextBoxHelper.ButtonWidth="0"
+                          Controls:TextBoxHelper.ButtonContent="{x:Null}" ItemsPanel="{DynamicResource AccountSelectorItemsPanelTemplate}"
+                          >
                 </ComboBox>
-                <TextBox Grid.Row="0" Grid.Column="1"
+                <TextBox x:Name="TootContent"
+                         Grid.Row="0" Grid.Column="1"
                          Text="{Binding TootTextInput, UpdateSourceTrigger=PropertyChanged}"
                          FontFamily="Yu Gothic UI Semibold"
                          Height="100"
@@ -208,31 +140,36 @@
                 </Grid>
             </Grid>
         </StackPanel>
-        <ItemsControl x:Name="itemsControl"
-            Grid.Row="1"
-            ItemsPanel="{DynamicResource TimelinePaneItems}"
-            ItemTemplate="{DynamicResource TimelinePaneControl}"
-            ItemsSource="{Binding Panes}">
+        <ItemsControl x:Name="Panes"
+                      Grid.Row="1"
+                      ItemsPanel="{DynamicResource TimelinePaneItems}"
+                      ItemTemplate="{DynamicResource TimelinePaneControl}"
+                      ItemsSource="{Binding Panes}">
             <ItemsControl.Resources>
                 <ItemsPanelTemplate x:Key="TimelinePaneItems">
                     <UniformGrid Rows="1"/>
                 </ItemsPanelTemplate>
                 <DataTemplate x:Key="TimelinePaneControl" DataType="vm:PaneViewModel">
-                    <Controls:MetroTabControl ItemsSource="{Binding Timelines}" Template="{DynamicResource MainPaneAreaTemplate}" FocusVisualStyle="{DynamicResource ControlStyle1}">
+                    <Controls:MetroTabControl x:Name="PaneTab"
+                                              Template="{DynamicResource mainPaneAreaTemplate}"
+                                              ItemsSource="{Binding Timelines}"
+                                              >
                         <Controls:MetroTabControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title}" />
+                                <TextBlock Text="{Binding Title, FallbackValue='failure'}" />
                             </DataTemplate>
                         </Controls:MetroTabControl.ItemTemplate>
                         <Controls:MetroTabControl.ContentTemplate>
                             <DataTemplate>
-                                <ListBox ItemsSource="{Binding Statuses}">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding}" />
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+                                <UniformGrid Rows="1" >
+                                    <ListBox x:Name="Statuses" Grid.Row="0" ItemsSource="{Binding Statuses}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate DataType="entities:Status">
+                                                <TextBlock Text="{Binding Content, FallbackValue='dummy'}" />
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </UniformGrid>
                             </DataTemplate>
                         </Controls:MetroTabControl.ContentTemplate>
                     </Controls:MetroTabControl>

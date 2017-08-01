@@ -17,6 +17,7 @@ type MainViewModel() as self =
     
     let messenger = InteractionMessenger()
     let config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
+    let panes = self.Factory.Backing(<@ self.Panes @>, PaneViewModel() |> Seq.singleton)
     
     member this.Load() =
         let section = 
@@ -32,6 +33,8 @@ type MainViewModel() as self =
         this.App <- section.AppModel
         this.App.LoadAvatar()
         |> Async.RunSynchronously
+
+        this.LoadTimeline()
         this.Reload()
 
     member this.Save() =
@@ -42,6 +45,30 @@ type MainViewModel() as self =
         sprintf "config saved to: %s" config.FilePath |> Debug.WriteLine
     member this.OAuth = OAuthViewModel(this, messenger)
     member this.Tooter = TooterViewModel(this, messenger)
-    member this.Panes = [| PaneViewModel() |]
+    member this.Panes with get() = panes.Value
+                      and set(v) = panes.Value <- v
+    member this.LoadTimeline() =
+        let account = this.App.GetUser this.App.CurrentUser
+        match account with
+        | Some acc ->
+            Debug.WriteLine "adding timeline..."
+            let timeline = TimelineViewModel(acc, HomeTimeline)
+            timeline.Fetch()
+            timeline.Title <- acc.FullName
+            (Seq.item 0 this.Panes).Add timeline
+            this.RaisePropertyChanged <@ this.Panes @>
+            Debug.WriteLine "added"
+        | None -> Debug.WriteLine (sprintf "No account to be loaded: %s" this.App.CurrentUser)
     member this.Reload() =
-        self.RaisePropertyChanged(<@ this @>)
+        this.RaisePropertyChanged(<@ this @>)
+    member this.AccountAdded() =
+        let account = this.App.GetUser this.App.CurrentUser
+        this.Tooter.SelectedAccount <- account
+        match account with
+        | Some acc ->
+            Debug.WriteLine "adding timeline..."
+            let timeline = TimelineViewModel(acc, HomeTimeline)
+            (Seq.item 0 this.Panes).Add timeline
+            timeline.Fetch()
+        | None -> ()
+        this.Messenger.Raise <| InteractionMessage "Update"
