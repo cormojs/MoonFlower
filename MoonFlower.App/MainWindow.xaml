@@ -97,29 +97,30 @@
 
             <Grid x:Name="TootBox" DataContext="{Binding Tooter}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="140" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <ComboBox x:Name="AccountSelector"
                           Grid.Row="0" Grid.Column="0"
                           ItemsSource="{Binding Accounts, UpdateSourceTrigger=PropertyChanged}"
                           ItemTemplate="{StaticResource AccountSelectorItemTemplate}"
-                          SelectedItem="{Binding SelectedAccount, UpdateSourceTrigger=PropertyChanged,
+                          SelectedItem="{Binding SelectedAccount,
+                                                 UpdateSourceTrigger=PropertyChanged,
                                                  Converter={StaticResource optionsTypeConverter},
                                                  Mode=TwoWay }"
                           Controls:TextBoxHelper.ButtonWidth="0"
-                          Controls:TextBoxHelper.ButtonContent="{x:Null}" ItemsPanel="{DynamicResource AccountSelectorItemsPanelTemplate}"
+                          Controls:TextBoxHelper.ButtonContent="{x:Null}"
+                          ItemsPanel="{DynamicResource AccountSelectorItemsPanelTemplate}"
                           >
                 </ComboBox>
                 <TextBox x:Name="TootContent"
                          Grid.Row="0" Grid.Column="1"
                          Text="{Binding TootTextInput, UpdateSourceTrigger=PropertyChanged}"
                          FontFamily="Yu Gothic UI Semibold"
-                         Height="100"
                          AcceptsReturn="True" />
                 <Grid Grid.Row="1" Grid.Column="1" x:Name="TootActions">
                     <Grid.ColumnDefinitions>
@@ -156,18 +157,16 @@
                                               >
                         <Controls:MetroTabControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Title, FallbackValue='failure'}" />
+                                <TextBlock FontSize="16" Text="{Binding Title, FallbackValue='failure'}" />
                             </DataTemplate>
                         </Controls:MetroTabControl.ItemTemplate>
                         <Controls:MetroTabControl.ContentTemplate>
                             <DataTemplate>
                                 <UniformGrid Rows="1" >
-                                    <ListBox x:Name="Statuses" Grid.Row="0" ItemsSource="{Binding Statuses}">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate DataType="entities:Status">
-                                                <TextBlock Text="{Binding Content, FallbackValue='dummy'}" />
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
+                                    <ListBox x:Name="Statuses" Grid.Row="0"
+                                             ScrollViewer.CanContentScroll="False"
+                                             ItemsSource="{Binding Statuses}"
+                                             ItemTemplate="{DynamicResource StatusTemplate}">
                                     </ListBox>
                                 </UniformGrid>
                             </DataTemplate>

@@ -27,18 +27,26 @@
             </Grid.RowDefinitions>
             <Grid x:Name="HeaderPanelGrid" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Controls:Underline x:Name="Underline" BorderBrush="{TemplateBinding Controls:TabControlHelper.UnderlineBrush}" Background="Transparent" LineThickness="1" Placement="Bottom" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="Collapsed"/>
-                <Button Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" BorderBrush="{x:Null}">
-                    <Rectangle Grid.Column="0" Width="15" Height="15" Fill="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Controls:Underline x:Name="Underline"
+                                    BorderBrush="{TemplateBinding Controls:TabControlHelper.UnderlineBrush}" 
+                                    Background="Transparent" LineThickness="1" Placement="Bottom" 
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="Collapsed"/>
+                <Button Grid.Column="0" Grid.Row="0"
+                        Margin="0" Padding="0"
+                        Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" BorderBrush="{x:Null}">
+                    <Rectangle Width="10" Height="10" Fill="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Visual="{StaticResource appbar_add}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                 </Button>
-                <TabPanel Grid.Column="1" x:Name="HeaderPanel" IsItemsHost="True" KeyboardNavigation.TabIndex="1" VerticalAlignment="Center"/>
+                <TabPanel Grid.Column="1" Grid.Row="0" x:Name="HeaderPanel" IsItemsHost="True" KeyboardNavigation.TabIndex="1" VerticalAlignment="Center"/>
             </Grid>
             <Border x:Name="ContentPanel"
                     BorderBrush="{TemplateBinding BorderBrush}"
@@ -109,12 +117,12 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <ContentControl Grid.Row="0" Grid.Column="0"
-                            x:Name="Avatar" Height="48" Width="48">
+                            x:Name="Avatar" Height="42" Width="48">
                 <ContentControl.Resources>
                     <Controls:ProgressRing x:Key="loadingRing"
-                                           Width="48" Height="48"
+                                           Width="42" Height="42"
                                            Foreground="{DynamicResource AccentColorBrush}"/>
-                    <Image Width="48" Height="48"
+                    <Image Width="42" Height="42"
                            x:Key="avatarImage"
                            Source="{Binding AvatarImageObj}" StretchDirection="DownOnly" />
                 </ContentControl.Resources>
@@ -145,4 +153,24 @@
     <ItemsPanelTemplate x:Key="AccountSelectorItemsPanelTemplate">
         <StackPanel IsItemsHost="True"/>
     </ItemsPanelTemplate>
+    
+    <DataTemplate x:Key="StatusTemplate" DataType="entities:Status">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="100" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <TextBlock FontSize="12" FontFamily="{StaticResource fontDefault}" Text="{Binding Account.AccountName, FallbackValue='john'}" />
+                <TextBlock FontSize="12" FontFamily="{StaticResource fontDefault}" Text=" / " />
+                <TextBlock FontSize="12" FontFamily="{StaticResource fontDefault}" Text="{Binding Account.DisplayName, FallbackValue='John'}" />
+            </StackPanel>
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       FontSize="12"
+                       Text="{Binding Content, FallbackValue=dummyaaaaaaaaaaaaa}" />
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

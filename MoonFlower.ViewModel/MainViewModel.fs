@@ -15,7 +15,6 @@ open MoonFlower.ViewModel
 type MainViewModel() as self =
     inherit MainViewModelBase()
     
-    let messenger = InteractionMessenger()
     let config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None)
     let panes = self.Factory.Backing(<@ self.Panes @>, PaneViewModel() |> Seq.singleton)
     
@@ -43,8 +42,8 @@ type MainViewModel() as self =
         JsonConvert.SerializeObject this.App |> Debug.WriteLine
         config.Save()
         sprintf "config saved to: %s" config.FilePath |> Debug.WriteLine
-    member this.OAuth = OAuthViewModel(this, messenger)
-    member this.Tooter = TooterViewModel(this, messenger)
+    member this.OAuth = OAuthViewModel(this, this.Messenger)
+    member this.Tooter = TooterViewModel(this, this.Messenger)
     member this.Panes with get() = panes.Value
                       and set(v) = panes.Value <- v
     member this.LoadTimeline() =
@@ -63,12 +62,9 @@ type MainViewModel() as self =
         this.RaisePropertyChanged(<@ this @>)
     member this.AccountAdded() =
         let account = this.App.GetUser this.App.CurrentUser
+        this.Tooter.Accounts <- this.App.Accounts
+        this.RaisePropertyChanged <@ this.Tooter @>
         this.Tooter.SelectedAccount <- account
-        match account with
-        | Some acc ->
-            Debug.WriteLine "adding timeline..."
-            let timeline = TimelineViewModel(acc, HomeTimeline)
-            (Seq.item 0 this.Panes).Add timeline
-            timeline.Fetch()
-        | None -> ()
+        this.RaisePropertyChanged <@ this.Tooter @>
+        this.LoadTimeline()
         this.Messenger.Raise <| InteractionMessage "Update"

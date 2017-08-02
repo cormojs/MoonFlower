@@ -47,9 +47,7 @@ type OAuthViewModel(parent: MainViewModelBase, messenger: InteractionMessenger) 
                 Debug.WriteLine <| sprintf "added account: %s" (account.ToString())
                 Debug.WriteLine <| JsonConvert.SerializeObject parent.App
                 parent.App.CurrentUser <- account.FullName
-                messenger.RaiseAsync(InteractionMessage("AccountUpdate"))
-                |> Async.AwaitTask
-                |> ignore
+                messenger.Raise <| InteractionMessage "AccountUpdate"
         } |> Async.Start
 
 
