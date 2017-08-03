@@ -64,7 +64,9 @@ type MainViewModel() as self =
         let account = this.App.GetUser this.App.CurrentUser
         this.Tooter.Accounts <- this.App.Accounts
         this.RaisePropertyChanged <@ this.Tooter @>
-        this.Tooter.SelectedAccount <- account
+        match account with
+        | Some acc -> this.Tooter.SelectedAccountFullName <- acc.FullName
+        | None -> ()
         this.RaisePropertyChanged <@ this.Tooter @>
         this.LoadTimeline()
         this.Messenger.Raise <| InteractionMessage "Update"

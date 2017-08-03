@@ -15,7 +15,6 @@ type OAuthViewModel(parent: MainViewModelBase, messenger: InteractionMessenger) 
 
     let hostName = self.Factory.Backing(<@ self.HostName @>, "", notNullOrWhitespace)
     let code = self.Factory.Backing(<@ self.Code @>, "", notNullOrWhitespace)
-    let appSettings = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).AppSettings
 
     member this.HostName
         with get() = hostName.Value

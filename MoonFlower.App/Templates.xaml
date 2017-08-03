@@ -155,22 +155,35 @@
     </ItemsPanelTemplate>
     
     <DataTemplate x:Key="StatusTemplate" DataType="entities:Status">
-        <Grid>
+        <Grid HorizontalAlignment="Stretch" >
+            <Grid.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="12" />
+                    <Setter Property="FontFamily" Value="{StaticResource fontDefault}" />
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="100" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                <TextBlock FontSize="12" FontFamily="{StaticResource fontDefault}" Text="{Binding Account.AccountName, FallbackValue='john'}" />
-                <TextBlock FontSize="12" FontFamily="{StaticResource fontDefault}" Text=" / " />
-                <TextBlock FontSize="12" FontFamily="{StaticResource fontDefault}" Text="{Binding Account.DisplayName, FallbackValue='John'}" />
+            <StackPanel x:Name="StatusHeader" Grid.Row="0" Grid.Column="0"
+                        Orientation="Horizontal">
+                <TextBlock Text="{Binding Account.AccountName, FallbackValue='john'}" />
+                <TextBlock Text=" / " />
+                <TextBlock Text="{Binding Account.DisplayName, FallbackValue='John'}" />
             </StackPanel>
-            <TextBlock Grid.Row="1" Grid.Column="0"
-                       FontSize="12"
-                       Text="{Binding Content, FallbackValue=dummyaaaaaaaaaaaaa}" />
+            <TextBlock x:Name="StatusContent" Grid.Row="1" Grid.Column="0"
+                       HorizontalAlignment="Stretch"
+                       TextWrapping="Wrap"
+                       Text="{Binding Content, FallbackValue='dummy text abcd edf'}" />
+            <DockPanel x:Name="StatusFooter" Grid.Row="2" Grid.Column="0">
+                <TextBlock HorizontalAlignment="Right" Text="{Binding CreatedAt}" />
+            </DockPanel>
+                        
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

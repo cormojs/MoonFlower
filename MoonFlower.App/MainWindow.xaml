@@ -21,7 +21,13 @@
     <Controls:MetroWindow.Resources>
         <vm:MainViewModel x:Key="mockViewModel" />
         <vm:OptionsTypeConverter x:Key="optionsTypeConverter"/>
+        <Storyboard x:Key="OnTextChanged1"/>
     </Controls:MetroWindow.Resources>
+    <Controls:MetroWindow.Triggers>
+        <EventTrigger RoutedEvent="TextBoxBase.TextChanged" SourceName="TootContent">
+            <BeginStoryboard x:Name="OnTextChanged1_BeginStoryboard" Storyboard="{StaticResource OnTextChanged1}"/>
+        </EventTrigger>
+    </Controls:MetroWindow.Triggers>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <ei:CallMethodAction TargetObject="{Binding}" MethodName="Load" />
@@ -49,7 +55,7 @@
           ShowGridLines="True"
           d:DataContext="{StaticResource mockViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <StackPanel x:Name="Header" Grid.Row="0">
@@ -112,6 +118,8 @@
                                                  UpdateSourceTrigger=PropertyChanged,
                                                  Converter={StaticResource optionsTypeConverter},
                                                  Mode=TwoWay }"
+                          SelectedValue="{Binding SelectedAccountFullName, Mode=TwoWay}"
+                          SelectedValuePath="FullName"
                           Controls:TextBoxHelper.ButtonWidth="0"
                           Controls:TextBoxHelper.ButtonContent="{x:Null}"
                           ItemsPanel="{DynamicResource AccountSelectorItemsPanelTemplate}"
@@ -119,7 +127,7 @@
                 </ComboBox>
                 <TextBox x:Name="TootContent"
                          Grid.Row="0" Grid.Column="1"
-                         Text="{Binding TootTextInput, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding TootTextInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          FontFamily="Yu Gothic UI Semibold"
                          AcceptsReturn="True" />
                 <Grid Grid.Row="1" Grid.Column="1" x:Name="TootActions">
@@ -130,13 +138,10 @@
                     <Button Grid.Column="1" x:Name="TootButton" Content="Toot!"
                             Style="{DynamicResource AccentedSquareButtonStyle}"
                             BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+                            Command="{Binding TootCommand}"
+                            CommandParameter="{Binding TootTextInput}"
                             FontSize="14" FontWeight="Normal"
                             FontFamily="Yu Gothic UI Semibold" Controls:ButtonHelper.PreserveTextCase="True">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:CallMethodAction TargetObject="{Binding}" MethodName="Toot" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
                     </Button>
                 </Grid>
             </Grid>
@@ -148,7 +153,7 @@
                       ItemsSource="{Binding Panes}">
             <ItemsControl.Resources>
                 <ItemsPanelTemplate x:Key="TimelinePaneItems">
-                    <UniformGrid Rows="1"/>
+                    <UniformGrid Rows="1" />
                 </ItemsPanelTemplate>
                 <DataTemplate x:Key="TimelinePaneControl" DataType="vm:PaneViewModel">
                     <Controls:MetroTabControl x:Name="PaneTab"
@@ -162,11 +167,18 @@
                         </Controls:MetroTabControl.ItemTemplate>
                         <Controls:MetroTabControl.ContentTemplate>
                             <DataTemplate>
-                                <UniformGrid Rows="1" >
+                                <UniformGrid Rows="1">
                                     <ListBox x:Name="Statuses" Grid.Row="0"
-                                             ScrollViewer.CanContentScroll="False"
+                                             VirtualizingPanel.ScrollUnit="Pixel"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                             HorizontalAlignment="Stretch"
                                              ItemsSource="{Binding Statuses}"
                                              ItemTemplate="{DynamicResource StatusTemplate}">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
                                     </ListBox>
                                 </UniformGrid>
                             </DataTemplate>
